@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ fname }} {{ lname }}| Room 204 Social</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        p {
+            color: #333;
+        }
+        
+        .navbar {
+            background-color: #333;
+            color: #fff;
+            padding: 15px;
+            display: flex;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .posts {
+            max-width: 600px;
+            margin: 20px auto;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .post {
+            background-color: #fff;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 0 10px 0 rgba(0,0,0,0.1);
+            word-wrap: break-word;
+        }
+
+        .post p {
+            margin: 0;
+            color: #000;
+        }
+
+        .post-username {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* Media query for smaller screens */
+        @media only screen and (max-width: 600px) {
+            body {
+                font-size: 0.875em; /* Reduce font-size for mobile */
+            }
+
+            .navbar {
+                flex-direction: column; /* Stack navbar items vertically on small screens */
+                align-items: flex-start;
+            }
+
+            .post {
+                padding: 10px; /* Reduce padding for mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a>{{ fname }}</a> <a href="/feed" class="main_feed_link">Main Feed</a>
+    </div>
+    {% if posts %}
+    {% if len > 0 %}
+    <ul class="posts">
+        {% for post in posts %}
+        <li class="post">
+            <p>{{ post["post_content"]|safe }}</p>
+            <p class="post-username">{{ post["username"] }}</p>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endif %}
+</body>
+</html>
