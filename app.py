@@ -24,20 +24,27 @@ user_uuid TEXT,
 url TEXT,
 reply_to TEXT,
 timestamp TEXT);""")
-conn.commit()
+crsr.execute("""CREATE TABLLE IF NOT EXISTS reactions
+(reaction_type TEXT,
+post_uuid TEXT,
+user_uuid TEXT,
+reaction_uuid TEXT)""")
 conn.commit()
 app = Flask(__name__)
 app.secret_key = '604d60c010ae89882132604ab91eef5a02a1bccb703b74eb918431e45364312a'
-def react(self):
-    query = """INSERT INTO reactions (type, post_uuid, user_uuid, reaction_uuid)
-            VALUES (?, ?, ?, ?)"""
-    values = (self.type, self.post_uuid, self.user_uuid, self.reaction_uuid)
-    try:
-        crsr.execute(query, values)
+class Reaction():
+    def __init__(self, reaction_type, post_uuid, user_uuid, reaction_uuid):
+        self.reaction_type = reaction_type
+        self.post_uuid = post_uuid
+        self.user_uuid = user_uuid
+        self.reaction_uuid = str(uuid_module.uuid4()) if not reaction_uuid else reaction_uuid
+    def new_reaction(self):
+        query = """INSERT INTO reactions (reaction_type, post_uuid, user_uuid, reaction_uuid)
+        VALUES (?, ?, ?, ?,)"""
+        parameters = (self.reaction_type, self.post_uuid, self.user_uuid, self.reaction_uuid,)
+        crsr.execute(query, parameters)
         conn.commit()
-        logging.info(f"Reaction {self.reaction_uuid} sent successfully.")
-    except Exception as e:
-        logging.error(f"Error sending reaction {self.reaction_uuid}: {e}")
+
 class User():
     def __init__(self,username,fname,lname,pwd, uuid_str=None, hashed=False):
         # Set the attributes of the user
